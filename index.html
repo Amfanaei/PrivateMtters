@@ -118,6 +118,20 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{
 @keyframes rise{10%{opacity:.22}100%{transform:translateY(-115vh) rotate(25deg);opacity:0}}
 @keyframes pulse{50%{box-shadow:0 10px 32px rgba(194,65,95,.45)}}
 .btn:not(.s):not([aria-disabled=true]){animation:pulse 2.2s ease-in-out infinite}
+/* Intro */
+body.lock{overflow:hidden}
+#intro{position:fixed;inset:0;z-index:50;overflow-y:auto;display:flex;
+  padding:calc(24px + env(safe-area-inset-top,0px)) 22px calc(24px + env(safe-area-inset-bottom,0px));
+  background:radial-gradient(circle at 85% 8%,rgba(194,65,95,.16),transparent 300px),radial-gradient(circle at 10% 90%,rgba(232,133,95,.12),transparent 280px),var(--bg);
+  transition:opacity .7s ease,transform .7s ease}
+#intro.out{opacity:0;transform:scale(1.04);pointer-events:none}
+#intro .in{position:relative;z-index:1;margin:auto;max-width:520px;text-align:center}
+#intro .l{margin:0 0 14px;font-size:1.1rem;line-height:2;animation:lineIn 1.2s ease both;animation-delay:var(--d)}
+#intro .big{font-size:3.2rem;line-height:1;color:var(--acc);margin-bottom:14px;animation:beat 1.8s ease-in-out infinite}
+#intro .key{font-size:1.5rem;font-weight:800;line-height:1.7;background:linear-gradient(120deg,var(--acc),var(--acc3));-webkit-background-clip:text;background-clip:text;color:transparent;margin:10px 0 18px}
+#intro .go{display:inline-block;margin-top:10px;padding:13px 34px}
+@keyframes lineIn{from{opacity:0;transform:translateY(18px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.12)}}
 /* Activity cards */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .opt{
@@ -322,7 +336,20 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{
 }
 </style>
 </head>
-<body>
+<body class="lock">
+<div id="intro" role="dialog" aria-modal="true" aria-label="پیام ویژه">
+  <div class="fx" id="ifx" aria-hidden="true"></div>
+  <div class="in">
+    <div class="big" aria-hidden="true">♥</div>
+    <p class="l" style="--d:.4s">یه دختری هست تو زندگیم که اسمش به طرز عجیبی مرتبطه با نقشش.</p>
+    <p class="l" style="--d:2.1s">بی‌اهمیت‌ترین چیزها در کنارش مهم میشن،</p>
+    <p class="l" style="--d:3.7s">بی‌ارزش‌ترین تجربه‌ها در کنارش ارزشمندترین میشن،</p>
+    <p class="l" style="--d:5.3s">سطحی‌ترین حس‌ها در کنارش موندگارترین میشن.</p>
+    <p class="l key" style="--d:7.1s">اون یه دختر نیست، دختر منه.</p>
+    <p class="l" style="--d:9s">۹۱۴امین روز دختر در سال جاری مبارکت باشه گوگولی من.. 💕</p>
+    <div class="l" style="--d:10.6s"><button class="btn go" id="go">بریم قرارو بچینیم</button></div>
+  </div>
+</div>
 <div class="fx" id="fx" aria-hidden="true"></div>
 <main>
 <h1>شوکولو بابا میاد دیت با من؟</h1>
@@ -388,7 +415,8 @@ function upd(){
   $('#msg').textContent=ready?'همه‌چی آماده‌ست 🥰 یکی از دکمه‌ها رو بزن، بعدش فقط «ارسال» رو بزن.':!sel.acts.size?'اول بگو دوست داری چیکار کنیم 😍':!sel.day?'حالا بگو کِی ببینمت 🌸':'آخرین قدم: ساعتش رو بگو ⏰';
 }
 $('#cp').onclick=async()=>{try{await navigator.clipboard.writeText(text());$('#msg').textContent='کپی شد. حالا برای من بفرستش 💕'}catch(e){$('#msg').textContent='کپی نشد 🥲 از دکمه‌ی تلگرام یا پیامک استفاده کن.'}};
-$('#fx').innerHTML=Array.from({length:12},()=>`<i style="left:${Math.random()*100}%;font-size:${14+Math.random()*18}px;animation-duration:${9+Math.random()*9}s;animation-delay:${-Math.random()*14}s">♥</i>`).join('');
+document.querySelectorAll('.fx').forEach(f=>f.innerHTML=Array.from({length:12},()=>`<i style="left:${Math.random()*100}%;font-size:${14+Math.random()*18}px;animation-duration:${9+Math.random()*9}s;animation-delay:${-Math.random()*14}s">♥</i>`).join(''));
+$('#go').onclick=()=>{const it=$('#intro'),m=document.querySelector('main');it.classList.add('out');document.body.classList.remove('lock');m.style.animation='none';void m.offsetWidth;m.style.animation='';setTimeout(()=>it.remove(),750)};
 upd();
 </script>
 </body>
